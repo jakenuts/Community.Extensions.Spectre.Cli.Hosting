@@ -32,5 +32,8 @@ jobs:
     - name: Test
       run: dotnet test  ${{ env.SOLUTION }} --no-build --verbosity normal --configuration ${{ env.CONFIG }}
     - name: Package 
-      run: dotnet pack ${{ env.PROJECT }} -c ${{ env.CONFIG }} --output ./publish
+      run: dotnet pack ${{ env.PROJECT }} --no-build -c ${{ env.CONFIG }} --output ./publish
+    - name: Publish 
+      run: dotnet nuget push ./publish/*.nupkg --api-key ${{secrets.GITHUB_TOKEN}} --source "github"
 
+     
