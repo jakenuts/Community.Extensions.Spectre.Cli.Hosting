@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Spectre.Console.Extensions.Hosting.Sample": {
+      "commandName": "Project",
+      "commandLineArgs": "You -p Sadie"
+    }
+  }
+}
