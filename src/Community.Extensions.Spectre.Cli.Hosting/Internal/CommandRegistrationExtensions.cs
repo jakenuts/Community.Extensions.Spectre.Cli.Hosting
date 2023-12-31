@@ -33,8 +33,8 @@ public static class CommandRegistrationExtensions
                                                                Action<ICommandConfigurator>? commandConfigurator = null)
         where TCommand : class, ICommand
     {
-        return services.AddTransient<CommandRegistration, TypedCommandRegistration<TCommand>>(c =>
-            new TypedCommandRegistration<TCommand>(name, commandConfigurator));
+        return services.AddTransient<CommandRegistration, CommandRegistration<TCommand>>(c =>
+            new CommandRegistration<TCommand>(name, commandConfigurator));
     }
 
     /// <summary>

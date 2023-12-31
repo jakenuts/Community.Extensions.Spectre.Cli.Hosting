@@ -18,20 +18,16 @@ public static class SpectreConsoleHostBuilderExtensions
     ///     to be added & configured during the UseSpectreConsole call.
     /// </summary>
     /// <typeparam name="TCommand"></typeparam>
-    /// <typeparam name="TOptions"></typeparam>
     /// <param name="services"></param>
     /// <param name="name"></param>
     /// <param name="commandConfigurator">The configuration action applied to the command</param>
     /// <returns></returns>
-    public static IServiceCollection AddCommand<TCommand, TOptions>(this IServiceCollection services, string name,
-                                                                    Action<ICommandConfigurator>? commandConfigurator = null)
-        where TCommand : class, ICommand<TOptions>
-        where TOptions : CommandSettings
+    public static IServiceCollection AddCommand<TCommand>(this IServiceCollection services, string name, 
+                                                          Action<ICommandConfigurator>? commandConfigurator = null)
+        where TCommand : class, ICommand
 
     {
-        // Could use ConfigurationHelper.GetSettingsType(typeof(TCommand)) but I want options flexible
         services.AddSingleton<TCommand>();
-        services.AddTransient<TOptions>(); // Not actually using currently?
         services.RegisterCommand<TCommand>(name, commandConfigurator);
         return services;
     }

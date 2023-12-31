@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Community.Extensions.Spectre.Cli.Hosting;
 
+/// <summary>
+/// A background service that runs the Spectre Console App
+/// </summary>
 public class SpectreConsoleWorker : BackgroundService
 {
     private readonly ICommandApp _commandApp;
@@ -14,6 +17,12 @@ public class SpectreConsoleWorker : BackgroundService
 
     private int _exitCode;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="commandApp"></param>
+    /// <param name="hostLifetime"></param>
     public SpectreConsoleWorker(ILogger<SpectreConsoleWorker> logger, ICommandApp commandApp,
                                 IHostApplicationLifetime hostLifetime)
     {

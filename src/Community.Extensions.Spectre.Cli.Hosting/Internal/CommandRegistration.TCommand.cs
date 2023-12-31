@@ -7,7 +7,7 @@ namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 /// </summary>
 /// <param name="Name"></param>
 /// <typeparam name="TCommand"></typeparam>
-public record TypedCommandRegistration<TCommand>(string Name, Action<ICommandConfigurator>? CommandConfigurator = null)
+public record CommandRegistration<TCommand>(string Name, Action<ICommandConfigurator>? CommandConfigurator = null)
     : CommandRegistration(typeof(TCommand), Name) where TCommand : class, ICommand
 {
     /// <summary>

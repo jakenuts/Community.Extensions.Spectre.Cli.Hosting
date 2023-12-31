@@ -1,29 +1,25 @@
 ﻿using System.Diagnostics;
+using Community.Extensions.Spectre.Cli.Hosting;
+using Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Community.Extensions.Spectre.Cli.Hosting;
-using Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Logging.AddSimpleConsole();
 
-// Adds the commands to the outer IServiceCollection and registers them
-// to be added when Spectre.Console.Cli is configured below.
-
-builder.Services.AddCommand<HelloCommand, HelloCommand.Options>("hello", config =>
+// Add a command and optionally configure it.
+builder.Services.AddCommand<HelloCommand>("hello", cmd =>
 {
-    config
-        .WithDescription("A command that says hello")
-        .WithExample("An example of other stuff");
-
-    //.WithAlias("yo");
+    cmd.WithDescription("A command that says hello");
 });
 
-builder.Services.AddCommand<OtherCommand, OtherCommand.Options>("other");
+// Add another command
+builder.Services.AddCommand<OtherCommand>("other");
 
-
+//
+// The standard call save for the commands will be pre-added & configured
+//
 builder.UseSpectreConsole<HelloCommand>(config =>
 {
     // All commands above are passed to config.AddCommand() by this point
@@ -32,7 +28,7 @@ builder.UseSpectreConsole<HelloCommand>(config =>
     config.ValidateExamples();
 #endif
     config.SetApplicationName("hello");
-    config.SetExceptionHandler(BasicExceptionHandler.WriteException);
+    config.UseBasicExceptionHandler();
 });
 
 var app = builder.Build();
