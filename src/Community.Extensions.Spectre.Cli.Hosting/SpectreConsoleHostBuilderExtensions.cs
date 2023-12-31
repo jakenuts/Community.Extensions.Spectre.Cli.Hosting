@@ -22,7 +22,7 @@ public static class SpectreConsoleHostBuilderExtensions
     /// <param name="name"></param>
     /// <param name="commandConfigurator">The configuration action applied to the command</param>
     /// <returns></returns>
-    public static IServiceCollection AddCommand<TCommand>(this IServiceCollection services, string name, 
+    public static IServiceCollection AddCommand<TCommand>(this IServiceCollection services, string name,
                                                           Action<ICommandConfigurator>? commandConfigurator = null)
         where TCommand : class, ICommand
 

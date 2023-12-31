@@ -6,23 +6,11 @@ namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 
 internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
 {
-    
-    #region Services Registered by the Host 
-    private readonly IServiceProvider _hostServiceRootProvider;
-    private IServiceScope? _hostServiceScope;
-    private IServiceProvider HostServiceProvider => _hostServiceScope?.ServiceProvider ?? _hostServiceRootProvider;
-    #endregion
-
-    #region Internal Services Registered by the Spectre.Console.Cli
-    private readonly IServiceProvider _internalServicesProvider;
-    private IServiceProvider InternalServiceProvider => _internalServicesProvider;
-    #endregion
-    
     private readonly ILogger<CustomTypeResolver> _log;
 
     /// <summary>
-    /// Allows for resolving types from the host service provider or from the internal
-    /// services registered by Spectre.Console.Cli.
+    ///     Allows for resolving types from the host service provider or from the internal
+    ///     services registered by Spectre.Console.Cli.
     /// </summary>
     /// <param name="internalProvider"></param>
     /// <param name="hostServiceProvider"></param>
@@ -31,17 +19,17 @@ internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
     {
         _hostServiceRootProvider = hostServiceProvider;
         _hostServiceScope = _hostServiceRootProvider.CreateScope();
-      
-        _internalServicesProvider = internalProvider ?? throw new ArgumentNullException(nameof(internalProvider));
+
+        InternalServiceProvider = internalProvider ?? throw new ArgumentNullException(nameof(internalProvider));
         _log = HostServiceProvider.GetRequiredService<ILogger<CustomTypeResolver>>();
     }
 
     /// <summary>
-    /// Cleans up the internal service provider and host service scope
+    ///     Cleans up the internal service provider and host service scope
     /// </summary>
     public void Dispose()
     {
-        if (_internalServicesProvider is IDisposable disposable)
+        if (InternalServiceProvider is IDisposable disposable)
         {
             disposable.Dispose();
         }
@@ -52,7 +40,7 @@ internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
     }
 
     /// <summary>
-    /// Called by Spectre.Console.Cli to resolve a type
+    ///     Called by Spectre.Console.Cli to resolve a type
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -90,4 +78,20 @@ internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
 
         return service;
     }
+
+    #region Services Registered by the Host
+
+    private readonly IServiceProvider _hostServiceRootProvider;
+
+    private IServiceScope? _hostServiceScope;
+
+    private IServiceProvider HostServiceProvider => _hostServiceScope?.ServiceProvider ?? _hostServiceRootProvider;
+
+    #endregion
+
+    #region Internal Services Registered by the Spectre.Console.Cli
+
+    private IServiceProvider InternalServiceProvider { get; }
+
+    #endregion
 }

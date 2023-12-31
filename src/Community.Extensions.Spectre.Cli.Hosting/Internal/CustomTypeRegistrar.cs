@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 
-
 namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 
 internal sealed class CustomTypeRegistrar : ITypeRegistrar
@@ -75,7 +74,7 @@ internal sealed class CustomTypeRegistrar : ITypeRegistrar
     }
 
     /// <summary>
-    /// Checks the service collection for any registered services matching the type
+    ///     Checks the service collection for any registered services matching the type
     /// </summary>
     /// <param name="serviceType"></param>
     /// <returns></returns>

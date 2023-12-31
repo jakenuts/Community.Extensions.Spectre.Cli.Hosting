@@ -1,8 +1,5 @@
-﻿using System.Text;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
@@ -12,7 +9,31 @@ namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 /// </summary>
 public static class CommandRegistrationExtensions
 {
-   
+    /// <summary>
+    ///     Adds registered commands to the provided app and allows further customization of the app and commands
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="provider"></param>
+    /// <param name="configureCommandApp"></param>
+    /// <returns></returns>
+    internal static ICommandApp ConfigureAppAndRegisteredCommands(this ICommandApp app, IServiceProvider provider,
+                                                                  Action<IConfigurator>? configureCommandApp = null)
+    {
+        app.Configure(config =>
+        {
+            // Add/Configure registered commands
+            foreach (var cmd in provider.GetRegisteredCommands())
+            {
+                cmd.Configure(config);
+            }
+
+            // Optionally allow caller to configure the command app
+            configureCommandApp?.Invoke(config);
+        });
+
+        return app;
+    }
+
     /// <summary>
     ///     Returns registered commands
     /// </summary>
@@ -35,29 +56,5 @@ public static class CommandRegistrationExtensions
     {
         return services.AddTransient<CommandRegistration, CommandRegistration<TCommand>>(c =>
             new CommandRegistration<TCommand>(name, commandConfigurator));
-    }
-
-    /// <summary>
-    /// Adds registered commands to the provided app and allows further customization of the app and commands
-    /// </summary>
-    /// <param name="app"></param>
-    /// <param name="provider"></param>
-    /// <param name="configureCommandApp"></param>
-    /// <returns></returns>
-    internal static ICommandApp ConfigureAppAndRegisteredCommands(this ICommandApp app, IServiceProvider provider, Action<IConfigurator>? configureCommandApp = null)
-    {
-        app.Configure(config =>
-        {
-            // Add/Configure registered commands
-            foreach (var cmd in provider.GetRegisteredCommands())
-            {
-                cmd.Configure(config);
-            }
-
-            // Optionally allow caller to configure the command app
-            configureCommandApp?.Invoke(config);
-        });
-
-        return app;
     }
 }

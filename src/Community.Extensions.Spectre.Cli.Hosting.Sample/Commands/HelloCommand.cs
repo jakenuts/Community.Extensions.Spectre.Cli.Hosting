@@ -8,7 +8,6 @@ using Spectre.Console.Cli;
 namespace Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 /// <summary>
-/// 
 /// </summary>
 public class HelloCommand : AsyncCommand<HelloCommand.Options>
 {
@@ -17,7 +16,7 @@ public class HelloCommand : AsyncCommand<HelloCommand.Options>
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    /// Creates a HelloCommand with access to services, the console and logging
+    ///     Creates a HelloCommand with access to services, the console and logging
     /// </summary>
     /// <param name="serviceProvider"></param>
     /// <param name="console"></param>
@@ -49,13 +48,11 @@ public class HelloCommand : AsyncCommand<HelloCommand.Options>
     }
 
     /// <summary>
-    /// 
     /// </summary>
     [Description("Says 'Hello' to you and optionally your dog.")]
     public class Options : CommandSettings
     {
         /// <summary>
-        /// 
         /// </summary>
         [Description("Your Name")]
         [CommandArgument(0, "<name>")]
@@ -63,7 +60,6 @@ public class HelloCommand : AsyncCommand<HelloCommand.Options>
         public string? Name { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         [Description("Your Dogs Name (Optional)")]
         [CommandArgument(1, "[name]")]

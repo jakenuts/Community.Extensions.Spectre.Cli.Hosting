@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 namespace Community.Extensions.Spectre.Cli.Hosting;
 
 /// <summary>
-/// A background service that runs the Spectre Console App
+///     A background service that runs the Spectre Console App
 /// </summary>
 public class SpectreConsoleWorker : BackgroundService
 {
@@ -18,7 +18,6 @@ public class SpectreConsoleWorker : BackgroundService
     private int _exitCode;
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="commandApp"></param>

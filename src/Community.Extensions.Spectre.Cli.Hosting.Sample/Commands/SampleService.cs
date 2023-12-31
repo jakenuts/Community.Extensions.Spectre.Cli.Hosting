@@ -1,12 +1,12 @@
 ﻿namespace Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 /// <summary>
-/// A SampleService to show commands can have dependencies injected
+///     A SampleService to show commands can have dependencies injected
 /// </summary>
 public class SampleService(string message)
 {
     /// <summary>
-    /// A message
+    ///     A message
     /// </summary>
-    public string Message { get; set; } = message; 
+    public string Message { get; set; } = message;
 }

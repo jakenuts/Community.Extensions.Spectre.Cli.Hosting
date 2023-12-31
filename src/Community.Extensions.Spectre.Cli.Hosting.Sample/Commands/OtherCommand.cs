@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -8,16 +6,16 @@ using Spectre.Console.Cli;
 namespace Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 /// <summary>
-/// Another command, just to show that multiple commands can be added
+///     Another command, just to show that multiple commands can be added
 /// </summary>
 public class OtherCommand : AsyncCommand<OtherCommand.Options>
 {
-    private readonly SampleService _service;
-
     private readonly IAnsiConsole _console;
 
+    private readonly SampleService _service;
+
     /// <summary>
-    /// Creates a OtherCommand with access to the console and logging
+    ///     Creates a OtherCommand with access to the console and logging
     /// </summary>
     /// <param name="service">A sample dependency</param>
     /// <param name="console"></param>
@@ -40,13 +38,11 @@ public class OtherCommand : AsyncCommand<OtherCommand.Options>
     }
 
     /// <summary>
-    /// 
     /// </summary>
     [Description("OtherOptions")]
     public class Options : CommandSettings
     {
         /// <summary>
-        /// 
         /// </summary>
         [Description("Other Stuff")]
         [CommandArgument(0, "<stuff>")]

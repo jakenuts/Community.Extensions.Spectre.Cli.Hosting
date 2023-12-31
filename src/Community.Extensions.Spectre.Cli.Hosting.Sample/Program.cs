@@ -9,11 +9,7 @@ using Spectre.Console.Cli;
 var builder = Host.CreateApplicationBuilder(args);
 
 // Add a command and optionally configure it.
-builder.Services.AddCommand<HelloCommand>("hello", cmd =>
-{
-    cmd.WithDescription("A command that says hello");
-});
-
+builder.Services.AddCommand<HelloCommand>("hello", cmd => { cmd.WithDescription("A command that says hello"); });
 
 // Add another command and its dependent service
 
