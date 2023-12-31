@@ -48,14 +48,23 @@ public class HelloCommand : AsyncCommand<HelloCommand.Options>
         return 0;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Description("Says 'Hello' to you and optionally your dog.")]
     public class Options : CommandSettings
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Description("Your Name")]
         [CommandArgument(0, "<name>")]
         [Required]
         public string? Name { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Description("Your Dogs Name (Optional)")]
         [CommandArgument(1, "[name]")]
         [CommandOption("-p|--pup")]

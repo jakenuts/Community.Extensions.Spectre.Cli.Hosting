@@ -27,7 +27,7 @@ public static class SpectreConsoleHostBuilderExtensions
         where TCommand : class, ICommand
 
     {
-        services.AddSingleton<TCommand>();
+        services.AddScoped<TCommand>();
         services.RegisterCommand<TCommand>(name, commandConfigurator);
         return services;
     }
