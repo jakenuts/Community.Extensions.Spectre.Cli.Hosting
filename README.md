@@ -24,10 +24,10 @@ builder.UseSpectreConsole<HelloCommand>(config =>
 {
     // All commands above are passed to config.AddCommand() by this point
 
-#if DEBUG
+    #if DEBUG
     config.PropagateExceptions();
     config.ValidateExamples();
-#endif
+    #endif
     config.SetApplicationName("hello");
     config.UseBasicExceptionHandler();
 });
