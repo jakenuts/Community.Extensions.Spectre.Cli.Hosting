@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Community.Extensions.Spectre.Cli.Hosting.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
@@ -13,31 +14,36 @@ namespace Community.Extensions.Spectre.Cli.Hosting;
 public static class SpectreConsoleHostBuilderExtensions
 {
     /// <summary>
-    /// Adds a command and it's options to the service collection
+    ///     Adds a command and it's options to the service collection. Also registers the command
+    ///     to be added & configured during the UseSpectreConsole call.
     /// </summary>
     /// <typeparam name="TCommand"></typeparam>
     /// <typeparam name="TOptions"></typeparam>
     /// <param name="services"></param>
+    /// <param name="name"></param>
+    /// <param name="commandConfigurator">The configuration action applied to the command</param>
     /// <returns></returns>
-    public static IServiceCollection AddCommand<TCommand, TOptions>(this IServiceCollection services)
+    public static IServiceCollection AddCommand<TCommand, TOptions>(this IServiceCollection services, string name,
+                                                                    Action<ICommandConfigurator>? commandConfigurator = null)
         where TCommand : class, ICommand<TOptions>
         where TOptions : CommandSettings
 
     {
         // Could use ConfigurationHelper.GetSettingsType(typeof(TCommand)) but I want options flexible
         services.AddSingleton<TCommand>();
-        services.AddTransient<TOptions>();
+        services.AddTransient<TOptions>(); // Not actually using currently?
+        services.RegisterCommand<TCommand>(name, commandConfigurator);
         return services;
     }
 
     /// <summary>
-    ///    Adds the internal services to the host builder.
+    ///     Adds the internal services to the host builder.
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
     private static HostApplicationBuilder AddInternalServices(HostApplicationBuilder builder)
     {
-        System.Console.OutputEncoding = Encoding.Default;
+        Console.OutputEncoding = Encoding.Default;
 
         builder.Services.AddHostedService<SpectreConsoleWorker>();
         builder.Services.AddSingleton(x => AnsiConsole.Console);
@@ -60,14 +66,8 @@ public static class SpectreConsoleHostBuilderExtensions
 
         builder.Services.AddSingleton<ICommandApp>(x =>
         {
-            var command = new CommandApp(new CustomTypeRegistrar(builder.Services, x));
-
-            if (configureCommandApp != null)
-            {
-                command.Configure(configureCommandApp);
-            }
-
-            return command;
+            var app = new CommandApp(new CustomTypeRegistrar(builder.Services, x));
+            return app.ConfigureAppAndRegisteredCommands(x, configureCommandApp);
         });
 
         return AddInternalServices(builder);
@@ -89,14 +89,9 @@ public static class SpectreConsoleHostBuilderExtensions
 
         builder.Services.AddSingleton<ICommandApp>(x =>
         {
-            var command = new CommandApp<TDefaultCommand>(new CustomTypeRegistrar(builder.Services, x));
-
-            if (configureCommandApp != null)
-            {
-                command.Configure(configureCommandApp);
-            }
-
-            return command;
+            // Create the command app
+            var app = new CommandApp<TDefaultCommand>(new CustomTypeRegistrar(builder.Services, x));
+            return app.ConfigureAppAndRegisteredCommands(x, configureCommandApp);
         });
 
         return AddInternalServices(builder);
