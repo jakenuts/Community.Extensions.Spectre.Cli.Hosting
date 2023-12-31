@@ -15,7 +15,7 @@ public static class SpectreConsoleHostBuilderExtensions
 {
     /// <summary>
     ///     Adds a command and it's options to the service collection. Also registers the command
-    ///     to be added & configured during the UseSpectreConsole call.
+    ///     to be added &amp; configured during the UseSpectreConsole call.
     /// </summary>
     /// <typeparam name="TCommand"></typeparam>
     /// <param name="services"></param>

@@ -6,28 +6,56 @@ namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 
 internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
 {
-    private readonly IServiceProvider _outerProvider;
+    
+    #region Services Registered by the Host 
+    private readonly IServiceProvider _hostServiceRootProvider;
+    private IServiceScope? _hostServiceScope;
+    private IServiceProvider HostServiceProvider => _hostServiceScope?.ServiceProvider ?? _hostServiceRootProvider;
+    #endregion
 
-    private readonly IServiceProvider _serviceProvider;
-
+    #region Internal Services Registered by the Spectre.Console.Cli
+    private readonly IServiceProvider _internalServicesProvider;
+    private IServiceProvider InternalServiceProvider => _internalServicesProvider;
+    #endregion
+    
     private readonly ILogger<CustomTypeResolver> _log;
 
-    public CustomTypeResolver(IServiceProvider internalProvider, IServiceProvider outerProvider)
+    /// <summary>
+    /// Allows for resolving types from the host service provider or from the internal
+    /// services registered by Spectre.Console.Cli.
+    /// </summary>
+    /// <param name="internalProvider"></param>
+    /// <param name="hostServiceProvider"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public CustomTypeResolver(IServiceProvider internalProvider, IServiceProvider hostServiceProvider)
     {
-        _outerProvider = outerProvider;
-        _serviceProvider = internalProvider ?? throw new ArgumentNullException(nameof(internalProvider));
-
-        _log = _outerProvider.GetRequiredService<ILogger<CustomTypeResolver>>();
+        _hostServiceRootProvider = hostServiceProvider;
+        _hostServiceScope = _hostServiceRootProvider.CreateScope();
+      
+        _internalServicesProvider = internalProvider ?? throw new ArgumentNullException(nameof(internalProvider));
+        _log = HostServiceProvider.GetRequiredService<ILogger<CustomTypeResolver>>();
     }
 
+    /// <summary>
+    /// Cleans up the internal service provider and host service scope
+    /// </summary>
     public void Dispose()
     {
-        if (_serviceProvider is IDisposable disposable)
+        if (_internalServicesProvider is IDisposable disposable)
         {
             disposable.Dispose();
         }
+
+        // Dispose of the outer service scope
+        _hostServiceScope?.Dispose();
+        _hostServiceScope = null;
     }
 
+    /// <summary>
+    /// Called by Spectre.Console.Cli to resolve a type
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public object? Resolve(Type? type)
     {
         if (type == null)
@@ -35,14 +63,17 @@ internal sealed class CustomTypeResolver : ITypeResolver, IDisposable
             return null;
         }
 
-        var service = _outerProvider.GetService(type);
+        // First try to resolve from the standard host service provider
+        var service = HostServiceProvider.GetService(type);
 
         if (service == null)
         {
-            service = _serviceProvider.GetService(type);
+            // Next try to resolve from the service provider associated with internal service
+            service = InternalServiceProvider.GetService(type);
 
             if (service == null)
             {
+                // Last fall back on activator
                 service = Activator.CreateInstance(type);
 
                 _log.LogDebug($"✨[Activator-Provider] Returned {type.FullName}");

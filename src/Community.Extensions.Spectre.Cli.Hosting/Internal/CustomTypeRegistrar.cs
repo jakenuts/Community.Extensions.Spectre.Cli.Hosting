@@ -35,9 +35,7 @@ internal sealed class CustomTypeRegistrar : ITypeRegistrar
 
     public void Register(Type service, Type implementation)
     {
-        var descriptor = ServiceDescriptor.Singleton(service, implementation);
-
-        if (ContainsMatchingServiceDescriptor(_outerCollection, descriptor))
+        if (HostServicesAlreadyContainServiceType(service))
         {
             _log.LogTrace($"✔️[Inner-Provider] Skipping duplicate registration of {implementation}");
             return;
@@ -45,20 +43,21 @@ internal sealed class CustomTypeRegistrar : ITypeRegistrar
 
         _log.LogTrace($"✨[Inner-Provider] Register {implementation}");
 
+        var descriptor = ServiceDescriptor.Singleton(service, implementation);
         _internalBuilder.Add(descriptor);
     }
 
     public void RegisterInstance(Type service, object implementation)
     {
-        var descriptor = ServiceDescriptor.Singleton(service, implementation);
-
-        if (ContainsMatchingServiceDescriptor(_outerCollection, descriptor))
+        if (HostServicesAlreadyContainServiceType(service))
         {
             _log.LogTrace($"✔️[Inner-Provider] Skipping duplicate registration of {implementation}");
             return;
         }
 
         _log.LogTrace($"✨[Inner-Provider] RegisterInstance {implementation}");
+
+        var descriptor = ServiceDescriptor.Singleton(service, implementation);
 
         _internalBuilder.Add(descriptor);
     }
@@ -76,19 +75,17 @@ internal sealed class CustomTypeRegistrar : ITypeRegistrar
     }
 
     /// <summary>
-    ///     Easier to implement with linq but this is the frameworks internal implementation
+    /// Checks the service collection for any registered services matching the type
     /// </summary>
-    /// <param name="collection"></param>
-    /// <param name="descriptor"></param>
+    /// <param name="serviceType"></param>
     /// <returns></returns>
-    private static bool ContainsMatchingServiceDescriptor(IServiceCollection collection, ServiceDescriptor descriptor)
+    private bool HostServicesAlreadyContainServiceType(Type serviceType)
     {
-        var count = collection.Count;
+        var count = _outerCollection.Count;
 
         for (var i = 0; i < count; i++)
         {
-            if (collection[i].ServiceType == descriptor.ServiceType
-                && collection[i].ServiceKey == descriptor.ServiceKey)
+            if (_outerCollection[i].ServiceType == serviceType)
             {
                 // Already added
                 return true;

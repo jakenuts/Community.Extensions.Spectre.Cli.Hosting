@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SOLUTION: ./src/Spectre.Console.Extensions.Hosting.sln
-      PROJECT: ./src/Spectre.Console.Extensions.Hosting/Spectre.Console.Extensions.Hosting.csproj
+      SOLUTION: ./src/Community.Extensions.Spectre.Cli.Hosting.sln
+      PROJECT: ./src/Community.Extensions.Spectre.Cli.Hosting/Community.Extensions.Spectre.Cli.Hosting.csproj
       CONFIG: Release
 
     steps:

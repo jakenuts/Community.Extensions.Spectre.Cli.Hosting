@@ -6,6 +6,7 @@ namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 ///     A typed registration class for commands with their types and name
 /// </summary>
 /// <param name="Name"></param>
+/// <param name="CommandConfigurator"></param>
 /// <typeparam name="TCommand"></typeparam>
 public record CommandRegistration<TCommand>(string Name, Action<ICommandConfigurator>? CommandConfigurator = null)
     : CommandRegistration(typeof(TCommand), Name) where TCommand : class, ICommand

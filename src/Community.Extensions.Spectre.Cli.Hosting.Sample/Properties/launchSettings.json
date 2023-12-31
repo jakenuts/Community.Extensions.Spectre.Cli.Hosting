@@ -1,10 +1,18 @@
 {
   "profiles": {
-    "Sample": {
+    "Sample:Help": {
       "commandName": "Project",
       //"commandLineArgs": "You -p Sadie"
       //"commandLineArgs": "other stuff"
       "commandLineArgs": "--help"
+    },
+    "Sample:Hello": {
+      "commandName": "Project",
+      "commandLineArgs": "You -p Sadie"
+    },
+    "Sample:Other": {
+      "commandName": "Project",
+      "commandLineArgs": "other stuff"
     },
     "Interactive": {
       "commandName": "Executable",
