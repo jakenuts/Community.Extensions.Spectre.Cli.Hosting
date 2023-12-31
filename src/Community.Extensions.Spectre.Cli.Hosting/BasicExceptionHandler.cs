@@ -9,6 +9,15 @@ namespace Community.Extensions.Spectre.Cli.Hosting;
 public static class BasicExceptionHandler
 {
     /// <summary>
+    /// Sets the exception handler to write the exception to the AnsiConsole.
+    /// </summary>
+    /// <param name="configurator"></param>
+    /// <returns></returns>
+    public static IConfigurator UseBasicExceptionHandler(this IConfigurator configurator)
+    {
+        return configurator.SetExceptionHandler(WriteException);
+    } 
+    /// <summary>
     /// Writes the exception to the AnsiConsole.
     /// </summary>
     /// <param name="e"></param>

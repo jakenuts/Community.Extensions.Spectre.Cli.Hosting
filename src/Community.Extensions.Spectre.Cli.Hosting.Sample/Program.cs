@@ -1,33 +1,34 @@
 ﻿using System.Diagnostics;
+using Community.Extensions.Spectre.Cli.Hosting;
+using Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Community.Extensions.Spectre.Cli.Hosting;
-using Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Logging.AddSimpleConsole();
 
-// Yes this is duplicated, this is the one we'll use and that
-// can receive services from the outer host service provider.
-builder.Services.AddCommand<HelloCommand, HelloCommand.Options>();
+// Add a command and optionally configure it.
+builder.Services.AddCommand<HelloCommand>("hello", cmd =>
+{
+    cmd.WithDescription("A command that says hello");
+});
 
+// Add another command
+builder.Services.AddCommand<OtherCommand>("other");
+
+//
+// The standard call save for the commands will be pre-added & configured
+//
 builder.UseSpectreConsole<HelloCommand>(config =>
 {
+    // All commands above are passed to config.AddCommand() by this point
 #if DEBUG
     config.PropagateExceptions();
     config.ValidateExamples();
 #endif
     config.SetApplicationName("hello");
-    config.SetExceptionHandler(BasicExceptionHandler.WriteException);
-
-    // This configures the command with the internal service provider. 
-    // Unfortunately, it comes after the external service provider & host have
-    // already been built. In future configuration should be extracted to a builder
-    // that can be configured prior to service provider creation allowing the two
-    // AddCommand calls to be combined.
-    config.AddCommand<HelloCommand>("hello");
+    config.UseBasicExceptionHandler();
 });
 
 var app = builder.Build();

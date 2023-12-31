@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 
 
-namespace Community.Extensions.Spectre.Cli.Hosting;
+namespace Community.Extensions.Spectre.Cli.Hosting.Internal;
 
 internal sealed class CustomTypeRegistrar : ITypeRegistrar
 {
