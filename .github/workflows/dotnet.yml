@@ -34,4 +34,4 @@ jobs:
     - name: Package 
       run: dotnet pack ${{ env.PROJECT }} --no-build -c ${{ env.CONFIG }} --output ./publish
     - name: Publish 
-      run: dotnet nuget push ./publish/*.nupkg --api-key ${{secrets.GITHUB_TOKEN}} --skip-duplicate --source "https://api.nuget.org/v3/index.json" 
+      run: dotnet nuget push ./publish/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate --source "https://api.nuget.org/v3/index.json" 
