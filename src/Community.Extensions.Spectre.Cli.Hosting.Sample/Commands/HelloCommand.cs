@@ -2,16 +2,26 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Spectre.Console.Extensions.Hosting.Sample.Commands;
+namespace Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
+/// <summary>
+/// 
+/// </summary>
 public class HelloCommand : AsyncCommand<HelloCommand.Options>
 {
     private readonly IAnsiConsole _console;
 
     private readonly IServiceProvider _serviceProvider;
 
+    /// <summary>
+    /// Creates a HelloCommand with access to services, the console and logging
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    /// <param name="console"></param>
+    /// <param name="log"></param>
     public HelloCommand(IServiceProvider serviceProvider, IAnsiConsole console, ILogger<HelloCommand> log)
     {
         _serviceProvider = serviceProvider;

@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
-    <PackageId>Spectre.Console.Extensions.Hosting</PackageId>
+    <PackageId>Community.Extensions.Spectre.Cli.Hosting</PackageId>
     <Version>1.0.0</Version>
   </PropertyGroup>
 

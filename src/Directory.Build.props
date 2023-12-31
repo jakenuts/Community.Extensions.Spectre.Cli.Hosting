@@ -18,12 +18,12 @@
     <Copyright></Copyright>
     <Authors></Authors>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/jakenuts/Spectre.Console.Extensions.Hosting</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jakenuts/Community.Extensions.Spectre.Cli.Hosting</RepositoryUrl>
     <!-- <PackageIcon>small-logo.png</PackageIcon> -->
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/jakenuts/Spectre.Console.Extensions.Hosting</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/jakenuts/Community.Extensions.Spectre.Cli.Hosting</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>https://github.com/jakenuts/Spectre.Console.Extensions.Hosting/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/jakenuts/Community.Extensions.Spectre.Cli.Hosting/releases</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Label="Source Link">

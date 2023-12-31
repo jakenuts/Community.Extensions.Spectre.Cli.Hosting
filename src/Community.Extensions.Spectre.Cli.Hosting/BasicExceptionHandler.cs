@@ -1,9 +1,17 @@
-﻿using Spectre.Console.Cli;
+﻿using Spectre.Console;
+using Spectre.Console.Cli;
 
-namespace Spectre.Console.Extensions.Hosting;
+namespace Community.Extensions.Spectre.Cli.Hosting;
 
+/// <summary>
+/// A basic handler that writes the exception to the AnsiConsole.
+/// </summary>
 public static class BasicExceptionHandler
 {
+    /// <summary>
+    /// Writes the exception to the AnsiConsole.
+    /// </summary>
+    /// <param name="e"></param>
     public static void WriteException(Exception e)
     {
         if (e is CommandAppException cae)

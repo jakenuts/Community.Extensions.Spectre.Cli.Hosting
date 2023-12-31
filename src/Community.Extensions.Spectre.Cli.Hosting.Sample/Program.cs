@@ -3,8 +3,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Spectre.Console.Extensions.Hosting;
-using Spectre.Console.Extensions.Hosting.Sample.Commands;
+using Community.Extensions.Spectre.Cli.Hosting;
+using Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Logging.AddSimpleConsole();
@@ -22,7 +22,11 @@ builder.UseSpectreConsole<HelloCommand>(config =>
     config.SetApplicationName("hello");
     config.SetExceptionHandler(BasicExceptionHandler.WriteException);
 
-    // This configures the command with the internal service provider
+    // This configures the command with the internal service provider. 
+    // Unfortunately, it comes after the external service provider & host have
+    // already been built. In future configuration should be extracted to a builder
+    // that can be configured prior to service provider creation allowing the two
+    // AddCommand calls to be combined.
     config.AddCommand<HelloCommand>("hello");
 });
 

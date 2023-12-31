@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 
-namespace Spectre.Console.Extensions.Hosting;
+namespace Community.Extensions.Spectre.Cli.Hosting;
 
 public class SpectreConsoleWorker : BackgroundService
 {

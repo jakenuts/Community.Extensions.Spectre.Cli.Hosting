@@ -2,9 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Spectre.Console.Extensions.Hosting;
+namespace Community.Extensions.Spectre.Cli.Hosting;
 
 /// <summary>
 ///     Extends <see cref="IHostBuilder" /> with SpectreConsole commands.
