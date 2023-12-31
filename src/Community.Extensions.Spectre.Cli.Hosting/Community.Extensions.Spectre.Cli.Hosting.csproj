@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Community.Extensions.Spectre.Cli.Hosting</PackageId>
-    <Version>1.0.0</Version>
   </PropertyGroup>
 
   
