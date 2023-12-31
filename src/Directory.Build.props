@@ -21,7 +21,7 @@
   <PropertyGroup Label="Package Information">
     <Description>A library assists with hosting Spectre.Console.Cli in a HostApplicationBuilder based app.</Description>
     <Copyright></Copyright>
-    <Authors></Authors>
+    <Authors>James White (@jakenuts)</Authors>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/jakenuts/Community.Extensions.Spectre.Cli.Hosting</RepositoryUrl>
     <!-- <PackageIcon>small-logo.png</PackageIcon> -->
