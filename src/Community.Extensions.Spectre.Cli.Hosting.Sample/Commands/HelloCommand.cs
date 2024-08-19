@@ -8,40 +8,27 @@ using Spectre.Console.Cli;
 namespace Community.Extensions.Spectre.Cli.Hosting.Sample.Commands;
 
 /// <summary>
+///  Creates a HelloCommand with access to services, the console and logging
 /// </summary>
-public class HelloCommand : AsyncCommand<HelloCommand.Options>
+/// <param name="serviceProvider"></param>
+/// <param name="console"></param>
+public class HelloCommand(IServiceProvider serviceProvider, IAnsiConsole console) : AsyncCommand<HelloCommand.Options>
 {
-    private readonly IAnsiConsole _console;
-
-    private readonly IServiceProvider _serviceProvider;
-
-    /// <summary>
-    ///     Creates a HelloCommand with access to services, the console and logging
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    /// <param name="console"></param>
-    /// <param name="log"></param>
-    public HelloCommand(IServiceProvider serviceProvider, IAnsiConsole console, ILogger<HelloCommand> log)
-    {
-        _serviceProvider = serviceProvider;
-        _console = console;
-    }
-
     /// <summary>Executes the command.</summary>
     /// <param name="context">The command context.</param>
     /// <param name="options">The command options.</param>
     /// <returns>An integer indicating whether or not the command executed successfully.</returns>
     public override async Task<int> ExecuteAsync(CommandContext context, Options options)
     {
-        await using var scope = _serviceProvider.CreateAsyncScope();
+        await using var scope = serviceProvider.CreateAsyncScope();
 
         // var coolService = scope.ServiceProvider.GetRequiredService<ITheCoolestService>();
 
-        _console.MarkupLineInterpolated($"[darkseagreen2_1] Hello {options.Name}![/]");
+        console.MarkupLineInterpolated($"[darkseagreen2_1] Hello {options.Name}![/]");
 
         if (!string.IsNullOrEmpty(options.DogsName))
         {
-            _console.MarkupLineInterpolated($"[darkseagreen2_1] Ooooo who's a good pup? {options.DogsName} thats who! 🐶[/]");
+            console.MarkupLineInterpolated($"[darkseagreen2_1] Ooooo who's a good pup? {options.DogsName} thats who! 🐶[/]");
         }
 
         return 0;
