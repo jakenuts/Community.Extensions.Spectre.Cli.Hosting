@@ -6,7 +6,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
-    <MinVerMinimumMajorMinor>1.1</MinVerMinimumMajorMinor>
+    <MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
