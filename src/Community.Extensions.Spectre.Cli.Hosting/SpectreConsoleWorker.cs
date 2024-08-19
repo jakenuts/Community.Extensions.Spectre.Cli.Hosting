@@ -7,30 +7,15 @@ namespace Community.Extensions.Spectre.Cli.Hosting;
 /// <summary>
 ///     A background service that runs the Spectre Console App
 /// </summary>
-public class SpectreConsoleWorker : BackgroundService
+public class SpectreConsoleWorker(
+    ILogger<SpectreConsoleWorker> logger,
+    ICommandApp commandApp,
+    IHostApplicationLifetime hostLifetime) : BackgroundService
 {
-    private readonly ICommandApp _commandApp;
-
-    private readonly IHostApplicationLifetime _hostLifetime;
-
-    private readonly ILogger<SpectreConsoleWorker> _logger;
-
-    private int _exitCode;
-
     /// <summary>
+    ///     The exit code returned by the Spectre Console App
     /// </summary>
-    /// <param name="logger"></param>
-    /// <param name="commandApp"></param>
-    /// <param name="hostLifetime"></param>
-    public SpectreConsoleWorker(ILogger<SpectreConsoleWorker> logger, ICommandApp commandApp,
-                                IHostApplicationLifetime hostLifetime)
-    {
-        _logger = logger;
-        _commandApp = commandApp;
-        _hostLifetime = hostLifetime;
-
-        logger.LogDebug("Constructed");
-    }
+    private int _exitCode;
 
     /// <summary>
     ///     This method is called when the <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> starts. The
@@ -49,26 +34,26 @@ public class SpectreConsoleWorker : BackgroundService
     /// </remarks>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogDebug("🧵 Console Background Worker Started");
+        logger.LogDebug("🧵 Console Background Worker Started");
 
         try
         {
             var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
-            _logger.LogTrace("_commandApp.RunAsync(args)");
+            logger.LogTrace("_commandApp.RunAsync(args)");
 
-            _exitCode = await _commandApp.RunAsync(args);
+            _exitCode = await commandApp.RunAsync(args);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An unexpected error occurred");
+            logger.LogError(ex, "An unexpected error occurred");
             _exitCode = 1;
         }
         finally
         {
-            _logger.LogDebug("🛑 Console Background Worker Stopping");
+            logger.LogDebug("🛑 Console Background Worker Stopping");
             Environment.ExitCode = _exitCode;
-            _hostLifetime.StopApplication();
+            hostLifetime.StopApplication();
         }
     }
 }
