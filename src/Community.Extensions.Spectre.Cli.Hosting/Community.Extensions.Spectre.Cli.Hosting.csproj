@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net7.0;net6.0;</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
@@ -11,11 +11,18 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="[8.*,)" />
-    <PackageReference Include="Spectre.Console.Cli" Version="[0.48,)" />
+    <PackageReference Include="Spectre.Console.Cli" Version="[0.49.1,)" />
+
+    <!-- Included only to avoid security warnings about pre 8.0.4 transient depedencies -->
+    <PackageReference Include="System.Text.Json" Version="[8.0.4,)" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath="\"/>
+    <None Include="package-icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="MinVer" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

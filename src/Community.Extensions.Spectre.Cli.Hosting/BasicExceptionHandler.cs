@@ -20,7 +20,8 @@ public static class BasicExceptionHandler
     ///     Writes the exception to the AnsiConsole.
     /// </summary>
     /// <param name="e"></param>
-    public static void WriteException(Exception e)
+    /// <param name="typeResolver"></param>
+    public static void WriteException(Exception e, ITypeResolver? typeResolver)
     {
         if (e is CommandAppException cae)
         {
