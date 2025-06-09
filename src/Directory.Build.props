@@ -10,6 +10,17 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  
+  <PropertyGroup Label="Target Frameworks">
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>   
+    <MsExtensionsVersion Condition="'$(TargetFramework)' == 'net9.0'">9.*</MsExtensionsVersion>
+    <MsExtensionsVersion Condition="'$(TargetFramework)' == 'net8.0'">8.*</MsExtensionsVersion>
+
+    <!-- === Spectre.Console Version === -->
+    <SpectreConsoleVersion>[0.50.0,)</SpectreConsoleVersion>
+  
+  </PropertyGroup>
+    
 
   <PropertyGroup Label="Deterministic Build" Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -34,7 +45,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="MinVer" PrivateAssets="All" Version="4.2.0" />
+    <PackageReference Include="MinVer" PrivateAssets="All" Version="*" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="*" />
   </ItemGroup>
 </Project>
