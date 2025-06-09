@@ -6,6 +6,7 @@ name: Build and Publish
 on:
   push:
     branches: [ "main" ]
+    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -38,3 +39,46 @@ jobs:
       run: dotnet pack ${{ env.PROJECT }} --no-build -c ${{ env.CONFIG }} --output ./publish
     - name: Publish 
       run: dotnet nuget push ./publish/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate --source "https://api.nuget.org/v3/index.json" 
+
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Get tag name
+      id: tag
+      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+    
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        # Get the previous tag
+        PREV_TAG=$(git tag --sort=-version:refname | grep -v "^${{ steps.tag.outputs.tag }}$" | head -n 1)
+        
+        if [ -z "$PREV_TAG" ]; then
+          echo "notes=Initial release" >> $GITHUB_OUTPUT
+        else
+          # Generate commit log between tags
+          NOTES=$(git log --pretty=format:"- %s" ${PREV_TAG}..${{ steps.tag.outputs.tag }} | head -20)
+          if [ -z "$NOTES" ]; then
+            NOTES="- Version bump to ${{ steps.tag.outputs.tag }}"
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create ${{ steps.tag.outputs.tag }} \
+          --title "Release ${{ steps.tag.outputs.tag }}" \
+          --notes "${{ steps.release_notes.outputs.notes }}"
